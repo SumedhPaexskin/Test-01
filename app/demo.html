@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #cameraModal .modal-dialog {
+            max-width: 500px;
+        }
+        #camera {
+            width: 100%;
+            height: 300px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f8f9fa;
+        }
+        #video {
+            width: 100%;
+            height: auto;
+        }
+        #cameraContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+#video {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+}
+    </style>
+</head>
+<body>
+   <form id="registrationForm">
+      <label for="email">Email:</label>
+      <input type="email" id="email" required><br>
+  
+      <label for="username">Username:</label>
+      <input type="text" id="username" required><br>
+  
+      <button type="button" id="openCameraButton">Open Camera</button>
+  
+      <div id="cameraContainer" style="display:none;">
+          <video id="video" width="100%" autoplay></video>
+          <button type="button" id="captureButton">Capture Image</button>
+      </div>
+  
+      <button type="submit">Register</button>
+  </form>
+
+    <script>
+         document.getElementById('openCameraButton').addEventListener('click', () => {
+    document.getElementById('cameraContainer').style.display = 'block';
+    startCamera();
+});
+
+function startCamera() {
+    const video = document.getElementById('video');
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then((stream) => {
+            video.srcObject = stream;
+        })
+        .catch((err) => {
+            console.error("Error accessing the camera:", err);
+            alert("Unable to access camera.");
+        });
+}
+
+document.getElementById('captureButton').addEventListener('click', () => {
+    const video = document.getElementById('video');
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    // You can upload the captured image to the backend here
+    // For demonstration purposes, let's display the captured image
+    const img = new Image();
+    img.src = canvas.toDataURL('image/png');
+    document.body.appendChild(img);
+    
+    // Stop the camera stream after capture
+    const stream = video.srcObject;
+    const tracks = stream.getTracks();
+    tracks.forEach(track => track.stop());
+});
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
+</body>
+</html>
