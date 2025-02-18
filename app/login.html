@@ -44,7 +44,8 @@
                         style="width: 185px;" alt="logo">
                       <h4 class="mt-1 mb-5 pb-1">We are The Lotus Team</h4>
                     </div>
-    
+                          <!-- Success Message: Will show if 'msg=success' is passed in the URL -->
+                           <div id="successMessage" class="success-message"></div>
                     <form>
                       <p>Please login to your account</p>
     
@@ -119,6 +120,14 @@
     </div>
 
     <script>
+            window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const msg = urlParams.get('msg');
+
+            if (msg === 'success') {
+                document.getElementById('successMessage').textContent = "Registration successful!";
+            }
+        };
          const video = document.getElementById('video');
     const captureButton = document.getElementById('captureButton');
     const openCameraButton = document.getElementById('openCameraButton');
