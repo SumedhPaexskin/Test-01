@@ -3,88 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="../styles/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <title>Login</title>
+    <title>User Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #cameraModal .modal-dialog {
+            max-width: 500px;
+        }
+        #camera {
+            width: 100%;
+            height: 300px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f8f9fa;
+        }
+        #video {
+            width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
-<body onload="init()">
-<nav class="navbar text-white navbar-dark bg-dark">
-<a href="#" class="navbar-brand">
-Login 
-</a>
-</nav>
-     <p>
-
-    </p>
-    <div class="container text-center bordered" style="width:280px">
-    <form action="login.py" method="post" enctype="multipart/form-data">
-    <video onclick="snapshot(this);" width=250 height=250 id="video" controls autoplay></video>
-    <br>
-    <input type="email" placeholder="Email" name="email" class="form-control form-control-sm text-left">
-    <br>
-    <input type="text" accept="image/png" hidden name="current_image" id="current_image">
-       <button  onclick="login()" class="btn-dark" value="login">Login </button>
-       <br>
-       <br>
-    </form>
+<body>
+    <div class="container mt-5">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h2 class="text-center mb-0">User Registration</h2>
+            </div>
+            <div class="card-body">
+                <form id="registrationForm" method="post" action="save_user.php" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Capture Image</label>
+                        <button type="button" class="btn btn-outline-secondary w-100" id="openCameraButton" data-bs-toggle="modal" data-bs-target="#cameraModal">
+                            <i class="bi bi-camera"></i> Open Camera
+                        </button>
+                        <input type="file" name="image" id="fileInput" class="form-control mt-3" style="display: none;" accept="image/*" capture="camera">
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Register</button>
+                </form>
+            </div>
+        </div>
     </div>
-      <canvas  id="myCanvas" width="400" height="350" hidden></canvas>  
-  </body>
-  <script>
-      //--------------------
-      // GET USER MEDIA CODE
-      //--------------------
-          navigator.getUserMedia = ( navigator.getUserMedia ||
-                             navigator.webkitGetUserMedia ||
-                             navigator.mozGetUserMedia ||
-                             navigator.msGetUserMedia);
 
-      var video;
-      var webcamStream;
-        if (navigator.getUserMedia) {
-           navigator.getUserMedia (
+    <!-- Camera Modal -->
+    <div class="modal fade" id="cameraModal" tabindex="-1" aria-labelledby="cameraModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cameraModalLabel">Capture Image</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="camera">
+                        <video id="video" autoplay></video>
+                    </div>
+                    <button type="button" class="btn btn-primary mt-3 w-100" id="captureButton">Capture</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-              // constraints
-              {
-                 video: true,
-                 audio: false
-              },
+    <script>
+        // Access the camera
+        const video = document.getElementById('video');
+        const captureButton = document.getElementById('captureButton');
+        const fileInput = document.getElementById('fileInput');
+        const openCameraButton = document.getElementById('openCameraButton');
 
-              // successCallback
-              function(localMediaStream) {
-                  video = document.querySelector('video');
-                 video.srcObject = localMediaStream;
-                 webcamStream = localMediaStream;
-              },
+        const canvas = document.createElement('canvas');
+        let stream = null;
 
-              // errorCallback
-              function(err) {
-                 console.log("The following error occured: " + err);
-              }
-           );
-        } else {
-           console.log("getUserMedia not supported");
-        }  
+        // Prompt user to access the camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((cameraStream) => {
+                stream = cameraStream;
+                video.srcObject = stream;
+            })
+            .catch((err) => {
+                console.error("Error accessing the camera: ", err);
+                alert("Unable to access the camera.");
+            });
 
- 
-     
-      var canvas, ctx;
+        // Capture the image and upload it to file input
+        captureButton.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      function init() {
-        // Get the canvas and obtain a context for
-        // drawing in it
-mcanvas = document.getElementById("myCanvas");
-        ctx = mcanvas.getContext('2d');
-      }
+            canvas.toBlob((blob) => {
+                const file = new File([blob], "captured-image.png", { type: "image/png" });
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+                alert("Image captured and uploaded successfully!");
 
-      function login() {
-         // Draws current image from the video element into the canvas
-        ctx.drawImage(video,0,0,mcanvas.width,mcanvas.height);
-        var dataURL = mcanvas.toDataURL('image/png');
-         document.getElementById("current_image").value=dataURL;
+                fileInput.style.display = "block";
+                fileInput.disabled = true;
+                openCameraButton.style.display = "none";
 
-      }
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
 
-  </script>
+                // Close the modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('cameraModal'));
+                modal.hide();
+            }, "image/png");
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
+</body>
 </html>
