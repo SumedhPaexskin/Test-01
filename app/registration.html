@@ -7,6 +7,7 @@
     <title>User Registration</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../styles/styles.css" rel="stylesheet">
+    <script src="../styles/js/face-api.min.js"></script>
 
     <style>
         #cameraModal .modal-dialog {
@@ -47,7 +48,8 @@
                                             style="width: 185px;" alt="logo">
                                         <h4 class="mt-1 mb-5 pb-1">User Registration</h4>
                                     </div>
-                                    <form id="registrationForm" method="post" action="../backend/register_user.php" enctype="multipart/form-data">
+                                    <form id="registrationForm" method="post" action="../backend/register_user.php"
+                                        enctype="multipart/form-data">
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Name</label>
                                             <input type="text" class="form-control" id="name" name="name" required>
@@ -65,7 +67,7 @@
                                             </button>
                                             <div class="preview">
                                                 <input type="file" name="image" id="fileInput" class="form-control mt-3"
-                                                    style="display: none;" accept="image/*" capture="camera">
+                                                    style="display: none;" accept="image/*" capture="camera" required >
                                                 <button type="button" style="display:none"
                                                     class="btn btn-warning w-100 mt-2" id="resetButton">
                                                     Reset
@@ -114,6 +116,12 @@
                 <div class="modal-body">
                     <div id="camera">
                         <video id="video" autoplay></video>
+                       <div id="loadingIndicator" style="display: none; text-align: center; margin-top: 20px;">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    <p>Detecting face...</p>
+</div>
                     </div>
                     <button type="button" class="btn btn-primary mt-3 w-100" id="captureButton">Capture</button>
                 </div>
@@ -122,6 +130,7 @@
     </div>
 
     <script>
+        // console.log(faceapi);
         // Access the camera
         const video = document.getElementById('video');
         const captureButton = document.getElementById('captureButton');
@@ -131,18 +140,26 @@
         const canvas = document.createElement('canvas');
         let stream = null;
 
-        // Prompt user to access the camera
-  
+        Promise.all([
+            faceapi.nets.tinyFaceDetector.loadFromUri('../models'),
+            faceapi.nets.faceLandmark68Net.loadFromUri('../models'),
+            faceapi.nets.faceRecognitionNet.loadFromUri('../models'),
+            // faceapi.nets.tinyFaceDetector.loadFromUri('../models')
+        ]).then(() => {
+            console.log('FaceAPI models loaded.');
+        });
+
         openCameraButton.addEventListener('click', () => {
+            video.style.display = 'block'
             navigator.mediaDevices.getUserMedia({ video: true })
-            .then((cameraStream) => {
-                stream = cameraStream;
-                video.srcObject = stream;
-            })
-            .catch((err) => {
-                console.error("Error accessing the camera: ", err);
-                alert("Unable to access the camera.");
-            });
+                .then((cameraStream) => {
+                    stream = cameraStream;
+                    video.srcObject = stream;
+                })
+                .catch((err) => {
+                    console.error("Error accessing the camera: ", err);
+                    alert("Unable to access the camera.");
+                });
             // Reinitialize the camera stream when the button is clicked
             if (!stream) {
                 console.log(stream);
@@ -160,13 +177,43 @@
             }
         });
 
-        // Capture the image and upload it to file input
-        captureButton.addEventListener('click', () => {
+        captureButton.addEventListener('click', async () => {
             const context = canvas.getContext('2d');
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
+            video.style.display = 'none';
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            console.log(canvas);
+            const options = new faceapi.TinyFaceDetectorOptions({
+                inputSize: 416,        // Size of the image input to the model (128, 160, 224, 320, 416)
+                scoreThreshold: 0.5,   // Confidence threshold for detections
+            });
+            try {
+                const loadingIndicator = document.getElementById('loadingIndicator');
+                loadingIndicator.style.display = 'block';
 
+                const detections = await faceapi.detectAllFaces(canvas, options);
+                console.log('Face detections:', detections);
+                loadingIndicator.style.display = 'none';
+
+                if (detections.length === 0) {
+                    alert("No face detected. Please ensure your face is visible in the camera.");
+                    return;
+                }
+
+                if (detections.length > 1) {
+                    alert("Multiple faces detected. Please ensure only one face is visible.");
+                    return;
+                }
+
+            } catch (error) {
+                console.error('Error detecting faces:', error);
+                video.style.display = 'block'
+return;
+
+            }
+
+            // alert("Face detected successfully!");
             canvas.toBlob((blob) => {
                 const file = new File([blob], "captured-image.png", { type: "image/png" });
                 const dataTransfer = new DataTransfer();
