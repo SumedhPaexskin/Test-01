@@ -1,134 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
-    <link href="../styles/css/bootstrap.min.css" rel="stylesheet">
-    <script src="../styles/js/bootstrap.min.js"></script>
-    <link href="../styles/styles.css" rel="stylesheet">
 
-    <style>
-        #cameraModal .modal-dialog {
-            max-width: 500px;
-        }
-        #camera {
-            width: 100%;
-            height: 300px;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #f8f9fa;
-        }
-        #video {
-            width: 100%;
-            height: auto;
-        }
-    </style>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Registration</title>
+  <link href="../styles/css/bootstrap.min.css" rel="stylesheet">
+  <script src="../styles/js/bootstrap.min.js"></script>
+  <link href="../styles/styles.css" rel="stylesheet">
+  <script src="../styles/js/face-api.min.js"></script>
+
+
+  <style>
+    #cameraModal .modal-dialog {
+      max-width: 500px;
+    }
+
+    #camera {
+      width: 100%;
+      height: 300px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f8f9fa;
+    }
+
+    #video {
+      width: 100%;
+      height: auto;
+    }
+  </style>
 </head>
+
 <body>
-   <section class="h-100 gradient-form" style="background-color: #eee;">
-      <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-          <div class="col-xl-10">
-            <div class="card rounded-3 text-black">
-              <div class="row g-0">
-                <div class="col-lg-6">
-                  <div class="card-body p-md-5 mx-md-4">
-    
-                    <div class="text-center">
-                      <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
-                        style="width: 185px;" alt="logo">
-                      <h4 class="mt-1 mb-5 pb-1">We are The Lotus Team</h4>
+  <section class="h-100 gradient-form" style="background-color: #eee;">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-xl-10">
+          <div class="card rounded-3 text-black">
+            <div class="row g-0">
+              <div class="col-lg-6">
+                <div class="card-body p-md-5 mx-md-4">
+
+                  <div class="text-center">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
+                      style="width: 185px;" alt="logo">
+                    <h4 class="mt-1 mb-5 pb-1">We are The Lotus Team</h4>
+                  </div>
+                  <!-- Success Message: Will show if 'msg=success' is passed in the URL -->
+                  <div id="successMessage" class="success-message"></div>
+                  <form>
+                    <p>Please login to your account</p>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <input type="email" id="form2Example11" class="form-control"
+                        placeholder="Phone number or email address" />
+                      <label class="form-label" for="form2Example11">Username</label>
                     </div>
-                          <!-- Success Message: Will show if 'msg=success' is passed in the URL -->
-                           <div id="successMessage" class="success-message"></div>
-                    <form>
-                      <p>Please login to your account</p>
-    
-                      <div data-mdb-input-init class="form-outline mb-4">
-                        <input type="email" id="form2Example11" class="form-control"
-                          placeholder="Phone number or email address" />
-                        <label class="form-label" for="form2Example11">Username</label>
-                      </div>
-    
-                      <button type="button" class="btn btn-outline-secondary w-100 mb-2" id="openCameraButton" data-bs-toggle="modal" data-bs-target="#cameraModal">
-                        <i class="bi bi-camera"></i> Open Camera
+
+                    <button type="button" class="btn btn-outline-secondary w-100 mb-2" id="openCameraButton"
+                      data-bs-toggle="modal" data-bs-target="#cameraModal">
+                      <i class="bi bi-camera"></i> Open Camera
                     </button>
-    
-                      <div class="text-center pt-1 mb-5 pb-1">
-                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="button">Log
-                          in</button>
-                        <a class="text-muted" href="#!">Forgot password?</a>
-                      </div>
-    
-                      <div class="d-flex align-items-center justify-content-center pb-4">
-                        <p class="mb-0 me-2">Don't have an account?</p>
-                        <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger" onclick="window.location.href='registration.html';">Create new</button>
+                    <div class="preview">
+                      <input type="file" name="image" id="fileInput" class="form-control mt-3" style="display: none;"
+                        accept="image/*" capture="camera" required>
+                      <button type="button" style="display:none" class="btn btn-warning w-100 mt-2" id="resetButton">
+                        Reset
+                      </button>
                     </div>
-    
-                    </form>
-    
-                  </div>
+                    <div class="text-center pt-1 mb-5 pb-1">
+                      <button data-mdb-button-init data-mdb-ripple-init
+                        class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" id="loginButton"
+                        type="button">Log
+                        in</button>
+
+                      <a class="text-muted" href="#!">Forgot password?</a>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-center pb-4">
+                      <p class="mb-0 me-2">Don't have an account?</p>
+                      <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger"
+                        onclick="window.location.href='registration.html';">Create new</button>
+                    </div>
+
+                  </form>
+
                 </div>
-                <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
-                  <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                    <h4 class="mb-4">Rules and Regulation</h4>
-                    <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                      <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                        <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                            <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                                <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>   
-                  </div>
+              </div>
+              <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+                <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                  <h4 class="mb-4">Rules and Regulation</h4>
+                  <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                  <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                  <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                  <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                  <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Camera Modal -->
-    <div class="modal fade" id="cameraModal" tabindex="-1" aria-labelledby="cameraModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cameraModalLabel">Capture Image</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="camera">
-                        <video id="video" autoplay></video>
-                    </div>
-                    <button type="button" class="btn btn-primary mt-3 w-100" id="captureButton">Capture</button>
-                </div>
-            </div>
-        </div>
     </div>
+  </section>
 
-    <script>
-            window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const msg = urlParams.get('msg');
 
-            if (msg === 'success') {
-                document.getElementById('successMessage').textContent = "Registration successful!";
-            }
-        };
-         const video = document.getElementById('video');
+  <!-- Camera Modal -->
+  <div class="modal fade" id="cameraModal" tabindex="-1" aria-labelledby="cameraModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="cameraModalLabel">Capture Image</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="camera">
+            <video id="video" autoplay></video>
+            <div id="loadingIndicator" style="display: none; text-align: center; margin-top: 20px;">
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <p>Detecting face...</p>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary mt-3 w-100" id="captureButton">Capture</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Loading Overlay -->
+<div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: green; z-index: 10050; justify-content: center; align-items: center; color: white; font-size: 1.5rem;" class="gradient-custom-2">
+  <div class="spinner-border text-light" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  <span style="margin-left: 10px;">Processing your face...</span>
+</div>
+
+
+  <script>
+  const loadingOverlay = document.getElementById('loadingOverlay');
+
+window.onload = function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const msg = urlParams.get('msg');
+
+      if (msg === 'success') {
+        document.getElementById('successMessage').textContent = "Registration successful!";
+      }
+    };
+    Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri('../models'),
+      faceapi.nets.faceLandmark68Net.loadFromUri('../models'),
+      faceapi.nets.faceRecognitionNet.loadFromUri('../models'),
+      // faceapi.nets.tinyFaceDetector.loadFromUri('../models')
+    ]).then(() => {
+      console.log('FaceAPI models loaded.');
+    });
+    const video = document.getElementById('video');
     const captureButton = document.getElementById('captureButton');
     const openCameraButton = document.getElementById('openCameraButton');
     const fileInput = document.getElementById('fileInput');
@@ -137,49 +179,197 @@
 
     // Open Camera button event listener
     openCameraButton.addEventListener('click', () => {
-        // Prompt user to access the camera only after button click
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then((cameraStream) => {
-                stream = cameraStream;
-                video.srcObject = stream;
-            })
-            .catch((err) => {
-                console.error("Error accessing the camera: ", err);
-                alert("Unable to access the camera.");
-            });
+      // Prompt user to access the camera only after button click
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then((cameraStream) => {
+          stream = cameraStream;
+          video.srcObject = stream;
+        })
+        .catch((err) => {
+          console.error("Error accessing the camera: ", err);
+          alert("Unable to access the camera.");
+        });
     });
 
     // Capture the image and upload it to file input
-    captureButton.addEventListener('click', () => {
+    async function getLocalImageDescriptor(imagePath) {
+      const imageOld = await faceapi.fetchImage(imagePath);
+      const detectionsOld = await faceapi.detectSingleFace(imageOld, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+
+      if (!detectionsOld) {
+        throw new Error('No face detected in the stored image.');
+      }
+
+      return detectionsOld.descriptor; // Return the 128-dimensional face descriptor
+    }
+    function compareFaces(storedDescriptor, liveDescriptor) {
+      const distance = faceapi.euclideanDistance(storedDescriptor, liveDescriptor);
+
+      // Define a threshold (e.g., 0.6) for face similarity
+      const threshold = 0.6;
+      if (distance < threshold) {
+        console.log('Faces match! Distance:', distance);
+        return true;
+      } else {
+        console.log('Faces do not match. Distance:', distance);
+        return false;
+      }
+    }
+    document.getElementById('loginButton').addEventListener('click', async () => {
+      try {
+        // Capture the user's face from the video stream
+        loadingOverlay.style.display = 'flex'; // Show loading overlay
+
+        const options = new faceapi.TinyFaceDetectorOptions({
+          inputSize: 416, // Higher size for better accuracy
+          scoreThreshold: 0.5 // Confidence threshold
+        });
+          const canvasDetection = await faceapi.detectSingleFace(canvas, options)
+      .withFaceLandmarks()
+      .withFaceDescriptor();
+          
+
+        if (!canvasDetection) {
+          alert('No face detected. Ensure your face is visible in the camera.');
+          loadingOverlay.style.display = 'flex'; // Show loading overlay
+
+          return;
+        }
+
+        // Draw the video frame onto the canvas
         const context = canvas.getContext('2d');
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        canvas.toBlob((blob) => {
-            const file = new File([blob], "captured-image.png", { type: "image/png" });
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            fileInput.files = dataTransfer.files;
-            alert("Image captured and uploaded successfully!");
+        // Get the stored image descriptor
+        const storedImagePath = '../../uploads/onkar.lagad@paexskin.com.jpg'; // Update this path
+        const storedDescriptor = await getLocalImageDescriptor(storedImagePath);
 
-            fileInput.style.display = "block";
-            fileInput.disabled = true;
-            openCameraButton.style.display = "none";
+        // Compare the current descriptor with the stored descriptor
+        const isMatch = compareFaceDescriptors(canvasDetection.descriptor, storedDescriptor);
 
-            // Stop all video tracks after capturing
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
-
-            // Close the modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('cameraModal'));
-            modal.hide();
-        }, "image/png");
+        if (isMatch) {
+          alert('Login successful! Faces match.');
+          // Redirect to a new page or perform other login actions
+          window.location.href = 'dashboard.html';
+        } else {
+          alert('Login failed. Faces do not match.');
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+      }
     });
-    </script>
+    function compareFaceDescriptors(descriptor1, descriptor2) {
+      const distance = faceapi.euclideanDistance(descriptor1, descriptor2);
+      const threshold = 0.6; // Adjust as needed
+      return distance < threshold;
+    }
+    captureButton.addEventListener('click', async () => {
+      loadingOverlay.style.display = 'flex'; // Show loading overlay
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
+      const context = canvas.getContext('2d');
+      canvas.width = 320; // Smaller width
+canvas.height = (video.videoHeight / video.videoWidth) * 320; // Maintain aspect ratio
+context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      video.style.display = 'none';
+      // context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      console.log(canvas);
+      const options = new faceapi.TinyFaceDetectorOptions({
+        inputSize: 416,
+        scoreThreshold: 0.5,
+      });
+      try {
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        loadingIndicator.style.display = 'block';
+
+        const detections = await faceapi.detectSingleFace(canvas, options);
+        console.log('Face detections:', detections);
+        loadingIndicator.style.display = 'none';
+
+        if (detections == undefined || detections.length === 0) {
+          alert("No face detected. Please ensure your face is visible in the camera.");
+          video.style.display = 'block'
+          loadingOverlay.style.display = 'none'; // Hide loading overlay
+
+          return;
+        }
+
+        if (detections.length > 1) {
+          alert("Multiple faces detected. Please ensure only one face is visible.");
+          video.style.display = 'block'
+          loadingOverlay.style.display = 'none'; // Hide loading overlay
+
+          return;
+        }
+
+      } catch (error) {
+        console.error('Error detecting faces:', error);
+        video.style.display = 'block'
+        loadingOverlay.style.display = 'none'; // Hide loading overlay
+
+        return;
+
+      }
+
+      canvas.toBlob((blob) => {
+        const file = new File([blob], "captured-image.png", { type: "image/png" });
+        const dataTransfer = new DataTransfer();
+        // dataTransfer.items.add(file);
+        // fileInput.files = dataTransfer.files;
+        alert("Image captured and uploaded successfully!");
+        loadingOverlay.style.display = 'none'; // Hide loading overlay
+
+        // fileInput.style.display = "block";
+        // fileInput.disabled = true;
+        openCameraButton.style.display = "none";
+
+        const img = new Image();
+        img.src = canvas.toDataURL('image/png');
+        img.style.display = 'block';
+        img.style.margin = 'auto';
+        img.style.width = '100%';
+        img.style.height = 'auto';
+        document.querySelector('.preview').appendChild(img);
+
+        const resetButton = document.getElementById('resetButton');
+        resetButton.style.display = 'block';
+
+        resetButton.addEventListener('click', () => {
+          // Clear the canvas (reset the video feed if needed)
+          const context = canvas.getContext('2d');
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          fileInput.value = '';
+          fileInput.style.display = 'none';
+          fileInput.disabled = false;
+
+          openCameraButton.style.display = 'block';
+          const previewImage = document.querySelector('.preview img');
+          if (previewImage) {
+            previewImage.src = '';
+          }
+
+          // Hide the reset button again after reset
+          resetButton.style.display = 'none';
+
+          alert("Reset successful!");
+        });
+
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop());
+        }
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('cameraModal'));
+        modal.hide();
+      }, "image/png");
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
 </body>
+
 </html>

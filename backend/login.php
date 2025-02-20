@@ -19,6 +19,7 @@ if ($conn->connect_error) {
     echo json_encode(["success" => false, "message" => "Database connection failed"]);
     exit();
 }
+require 'db_conn.php';
 
 
 $email = $_POST['email'] ?? '';
