@@ -1,0 +1,105 @@
+{
+    "questions": [
+      {
+        "question": "Which country won the FIFA World Cup in 2018?",
+        "options": ["Germany", "Brazil", "France", "Argentina"],
+        "correct_answer": "France"
+      },
+      {
+        "question": "Who holds the record for the most Grand Slam titles in men's tennis?",
+        "options": ["Roger Federer", "Rafael Nadal", "Novak Djokovic", "Pete Sampras"],
+        "correct_answer": "Novak Djokovic"
+      },
+      {
+        "question": "How many players are there in a standard soccer team?",
+        "options": ["9", "10", "11", "12"],
+        "correct_answer": "11"
+      },
+      {
+        "question": "Which sport is known as the 'king of sports'?",
+        "options": ["Cricket", "Soccer", "Basketball", "Tennis"],
+        "correct_answer": "Soccer"
+      },
+      {
+        "question": "Which country has won the most Olympic gold medals?",
+        "options": ["China", "USA", "Russia", "Germany"],
+        "correct_answer": "USA"
+      },
+      {
+        "question": "Which athlete is known as the fastest man in the world?",
+        "options": ["Carl Lewis", "Usain Bolt", "Tyson Gay", "Michael Johnson"],
+        "correct_answer": "Usain Bolt"
+      },
+      {
+        "question": "Which team won the NBA Championship in 2020?",
+        "options": ["Miami Heat", "Los Angeles Lakers", "Golden State Warriors", "Boston Celtics"],
+        "correct_answer": "Los Angeles Lakers"
+      },
+      {
+        "question": "How many points is a touchdown worth in American football?",
+        "options": ["3", "6", "7", "8"],
+        "correct_answer": "6"
+      },
+      {
+        "question": "What is the national sport of Japan?",
+        "options": ["Baseball", "Judo", "Sumo Wrestling", "Karate"],
+        "correct_answer": "Sumo Wrestling"
+      },
+      {
+        "question": "Which golfer is known as 'The Golden Bear'?",
+        "options": ["Tiger Woods", "Jack Nicklaus", "Arnold Palmer", "Phil Mickelson"],
+        "correct_answer": "Jack Nicklaus"
+      },
+      {
+        "question": "What is the highest possible break in snooker?",
+        "options": ["147", "155", "160", "170"],
+        "correct_answer": "147"
+      },
+      {
+        "question": "Which country hosted the 2016 Summer Olympics?",
+        "options": ["China", "Brazil", "USA", "UK"],
+        "correct_answer": "Brazil"
+      },
+      {
+        "question": "Who is known as the 'God of Cricket'?",
+        "options": ["Virat Kohli", "MS Dhoni", "Ricky Ponting", "Sachin Tendulkar"],
+        "correct_answer": "Sachin Tendulkar"
+      },
+      {
+        "question": "Which Formula 1 driver has won the most world championships?",
+        "options": ["Michael Schumacher", "Lewis Hamilton", "Ayrton Senna", "Sebastian Vettel"],
+        "correct_answer": "Lewis Hamilton"
+      },
+      {
+        "question": "Which country is famous for originating the sport of rugby?",
+        "options": ["Australia", "England", "New Zealand", "South Africa"],
+        "correct_answer": "England"
+      },
+      {
+        "question": "Which team won the ICC Cricket World Cup in 2019?",
+        "options": ["India", "Australia", "England", "New Zealand"],
+        "correct_answer": "England"
+      },
+      {
+        "question": "What is the diameter of a basketball hoop in inches?",
+        "options": ["16", "18", "20", "22"],
+        "correct_answer": "18"
+      },
+      {
+        "question": "Which player has won the most Ballon d'Or awards?",
+        "options": ["Cristiano Ronaldo", "Lionel Messi", "Ronaldinho", "Zinedine Zidane"],
+        "correct_answer": "Lionel Messi"
+      },
+      {
+        "question": "Which sport is played at Wimbledon?",
+        "options": ["Badminton", "Tennis", "Squash", "Table Tennis"],
+        "correct_answer": "Tennis"
+      },
+      {
+        "question": "Which country is the birthplace of the Olympic Games?",
+        "options": ["Italy", "France", "Greece", "USA"],
+        "correct_answer": "Greece"
+      }
+    ]
+  }
+  
