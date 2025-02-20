@@ -252,7 +252,7 @@ window.onload = function () {
         const isMatch = compareFaceDescriptors(canvasDetection.descriptor, storedDescriptor);
 
         if (isMatch) {
-          alert('Login successful! Faces match.');
+          // alert('Login successful! Faces match.');
           // Redirect to a new page or perform other login actions
           window.location.href = 'dashboard.html';
         } else {
@@ -319,7 +319,7 @@ context.drawImage(video, 0, 0, canvas.width, canvas.height);
         const dataTransfer = new DataTransfer();
         // dataTransfer.items.add(file);
         // fileInput.files = dataTransfer.files;
-        alert("Image captured and uploaded successfully!");
+        // alert("Image captured and uploaded successfully!");
         loadingOverlay.style.display = 'none'; // Hide loading overlay
 
         // fileInput.style.display = "block";
@@ -355,7 +355,7 @@ context.drawImage(video, 0, 0, canvas.width, canvas.height);
           // Hide the reset button again after reset
           resetButton.style.display = 'none';
 
-          alert("Reset successful!");
+          // alert("Reset successful!");
         });
 
         if (stream) {
