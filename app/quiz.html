@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../styles/js/face-api.min.js"></script>
     <style>
         body {
             background-color: #000;
@@ -133,6 +134,14 @@
     </div>
 </body>
 <script>
+Promise.all([
+            faceapi.nets.tinyFaceDetector.loadFromUri('../models'),
+            faceapi.nets.faceLandmark68Net.loadFromUri('../models'),
+            faceapi.nets.faceRecognitionNet.loadFromUri('../models'),
+            // faceapi.nets.tinyFaceDetector.loadFromUri('../models')
+        ]).then(() => {
+            console.log('FaceAPI models loaded.');
+        });
              navigator.mediaDevices.getUserMedia({ video: true })
                 .then((cameraStream) => {
                     stream = cameraStream;
@@ -142,5 +151,40 @@
                     console.error("Error accessing the camera: ", err);
                     alert("Unable to access the camera.");
                 });
+                async function monitorUser() {
+    const video = document.getElementById('video');
+
+    // Set up options for the face detector
+    const detectionOptions = new faceapi.TinyFaceDetectorOptions({ inputSize: 224 });
+
+    setInterval(async () => {
+        const detections = await faceapi.detectAllFaces(video, detectionOptions)
+            .withFaceLandmarks();
+console.log(detections);
+        if (detections.length === 0) {
+            alert("No face detected. Please stay in front of the camera!");
+        } else if (detections.length > 1) {
+            alert("Multiple faces detected. Please ensure you're alone!");
+        } else {
+            const face = detections[0].landmarks;
+            const nose = face.getNose();
+
+            // Check if the user is looking away
+            const faceCenterX = nose[0].x;
+            const videoWidth = video.videoWidth;
+
+            if (faceCenterX < videoWidth * 0.3 || faceCenterX > videoWidth * 0.7) {
+                alert("You seem to be looking away. Please focus on the screen.");
+            }
+        }
+    }, 1000); // Check every second
+}
+
+function alertUser(message) {
+    console.log(message); // Replace with on-screen notification or toast
+}
+
+monitorUser();
+
 </script>
 </html>
