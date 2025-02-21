@@ -162,20 +162,20 @@
                     alert("Unable to access the camera.");
                 });
             // Reinitialize the camera stream when the button is clicked
-            if (!stream) {
-                console.log(stream);
+            // if (!stream) {
+            //     console.log(stream);
 
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then((cameraStream) => {
-                        stream = cameraStream;
-                        video.srcObject = stream;
-                        video.play(); 
-                    })
-                    .catch((err) => {
-                        console.error("Error accessing the camera: ", err);
-                        alert("Unable to access the camera. Please check your permissions.");
-                    });
-            }
+            //     navigator.mediaDevices.getUserMedia({ video: true })
+            //         .then((cameraStream) => {
+            //             stream = cameraStream;
+            //             video.srcObject = stream;
+            //             video.play(); 
+            //         })
+            //         .catch((err) => {
+            //             console.error("Error accessing the camera: ", err);
+            //             alert("Unable to access the camera. Please check your permissions.");
+            //         });
+            // }
         });
         document.getElementById('email').addEventListener('blur', async function () {
             const email = this.value.trim();
