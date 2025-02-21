@@ -151,6 +151,24 @@ Promise.all([
                     console.error("Error accessing the camera: ", err);
                     alert("Unable to access the camera.");
                 });
+                var count = 0;
+                document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+        count++;
+        alert("Please stay on this tab to continue!");
+    }
+});
+async function enterFullscreen() {
+            try {
+                await document.documentElement.requestFullscreen();
+            } catch (error) {
+                console.error("Error entering fullscreen mode:", error);
+            }
+        }
+
+        // Automatically enter fullscreen when the page loads
+        window.onload = enterFullscreen;
+ 
                 async function monitorUser() {
     const video = document.getElementById('video');
 
@@ -160,7 +178,7 @@ Promise.all([
     setInterval(async () => {
         const detections = await faceapi.detectAllFaces(video, detectionOptions)
             .withFaceLandmarks();
-console.log(detections);
+        console.log(detections);
         if (detections.length === 0) {
             alert("No face detected. Please stay in front of the camera!");
         } else if (detections.length > 1) {
